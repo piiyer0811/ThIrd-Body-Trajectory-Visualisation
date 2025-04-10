@@ -1,93 +1,53 @@
-# scivis-ss25
+# Programming framework for the course "Scientific Visualization".
+
+## Supported Operating Systems
+
+In the following you will be guided through the process of installing and setting up everything necessary to work on the programming exercise. The instructions mainly focus on Windows but the process on Linux should be similar with a few adaptations. If you need help with setting up on Linux we are happy to help. Unfortunately, we do not support macOS officially but we have seen students who were able to run it in previous years.
 
 
+## Install IDE
+If you are working on windows we recommend using Visual Studio as your development environment. You can download it from [https://visualstudio.microsoft.com/de/downloads/](https://visualstudio.microsoft.com/de/downloads/). Simply follow the install instructions and make sure to also install the package "Desktop development with C++".
 
-## Getting started
+## Install CMake
+CMake is a cross-platform build tool that sets up a project for a given compiler and development environment. Visit [https://cmake.org/download/](https://cmake.org/download/) and download the latest version of CMake. You can use the installers. It is not necessary to build CMake from source.
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+## Download VTK
+VTK is among the most popular libraries for scientific visualization. Throughout the programming exercises, we will use VTK for rendering. Visit [http://www.vtk.org/download/](http://www.vtk.org/download/) and download the latest version of VTK (9.4.2 at the time of writing). VTK has to be built from source. Thus, scroll down to the sources and download them. It is not necessary to download the data sets
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+For Linux users we recommend to use a newer version than the versions that are currently available for download since they address a performance issue on Linux machines. To do so it is necessary to get the source code from the official VTK GitLab repository [https://gitlab.kitware.com/vtk/vtk](https://gitlab.kitware.com/vtk/vtk). From there you can either download the sources in a zip file or clone the repository. We tested the framework on commit *54b70aeb8b69ad185cf765ea3040a2da91697b78*. We recommend to navigate to that commit before downloading the zip file or checking out that commit after cloning the repository. The paths in the following tasks have to be adapted to match the path to your downloaded directory.
 
-## Add your files
+## Build VTK using CMake
+* Start *cmake-gui*. 
+* Enter into the text box that is labeled with 'Where is the source code:' the path to VTK. For instance: *D:/VTK-9.4.2*
+* Enter into the text box that is labeled with 'Where to build the binaries:' another arbitrary folder. For instance: *D:/VTK-9.4.2/build*
+* Press *Configure*. If the build folder does not exist yet, CMake will ask you, whether it should create the folder for you. Say, yes.
+* Select compiler. A window will open with a list of all supported compilers. Select your favorite compiler. (E.g., *Visual Studio 17 2022*. Also, if you have a 64-bit system, select the *x64* as optional platform for generator.) After selecting the compiler, CMake will run a few diagnostics and test your compiler. If you immediately get an error, you probably selected a compiler that cannot be found on your computer. Check again, whether you selected the right version of your compiler. Expect that the first configuration might take a while.
+* Press *Configure* again. After the first run, CMake will have found and listed numerous configuration options. Every newly found configuration option is highlighted in red. After the first run, that's all of them. In a second run, the red highlights should disappear, since the configuration options have already been found. They only remain red if there are problems, for instance if a dependent library could not be found. If all red highlights disappeared, you can continue to the next step. 
+* Press *Generate*. This button will generate the project files for your selected compiler. If you selected Visual Studio, a solution file  (sln) will be created for you in your build folder.
+* Press *Open Project*. This button will open the project using the default IDE.
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+The following steps are for Visual Studio. For other IDEs the procedure is probably somewhat similar.
+* Select the configuration *'Release'*.
+* Build the project *'ALL_BUILD'*. This will compile every library of VTK. This will take a while. (Get coffee and hope that no compiler errors have shown up while you were gone.)
+* (optional) Select the configuration *'Debug'*.
+* Build the project *'ALL_BUILD'*. Yes, time for another coffee.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.rrze.fau.de/vc/teaching/ss25/scivis-ss25.git
-git branch -M main
-git push -uf origin main
-```
+## Building the Exercise Program
+In the following, we setup the programming framework.
+* Clone this repository or download the zipped version from this repository (Coed -> Download source code -> zip). If you did the latter you also need to extract the package.
+* Start *cmake-gui*. 
+* Enter into the text box that is labeled with 'Where is the source code:' the path to the cloned repository or the unpacked folder. For instance: *D:/scivis-ss25* (Make sure that this folder contains the CMakeLists.txt file, which configures the build procedure of CMake.)
+* Enter into the text box that is labeled with 'Where to build the binaries:' another arbitrary folder. For instance: *D:/scivis-ss25/build*.
+* Press *Configure*. If the build folder does not exist yet, CMake will ask you, whether it should create the folder for you. Say, yes.
+* Select compiler. A window will open with a list of all supported compilers. Select your favorite compiler. Make sure that you use the same compiler as you used above for compiling VTK. CMake will run a few diagnostics and test your compiler.
+* Specify *VTK build path*. You get an error message. CMake was probably not able to find your VTK build path on its own, so you have to help. Set as *'VTK_DIR'* the path where you built VTK. For instance, *D:/VTK-9.4.2/build*.
+* Press *Configure* again. Now, VTK should be found and the configuration can continue.
+* Press *Generate*. This button will generate the project files for your selected compiler. If you selected Visual Studio, a solution file (sln) will be created for you in your build folder.
+* Press *Open Project*. This button will open the project using the default IDE.
 
-## Integrate with your tools
-
-- [ ] [Set up project integrations](https://gitlab.rrze.fau.de/vc/teaching/ss25/scivis-ss25/-/settings/integrations)
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+## Running an Exercise Program
+The following steps are for Visual Studio again. If you use another IDE, the steps should be somewhat similar.
+* Always be aware whether you compile in Debug or Release mode.
+* Set *startup project*. Do a right click on the project *scivis* in the *Solution Explorer*. Select *Set as startup project*. The project name should now be printed in bold letters. Hitting F5 will now build and run our program. (If you do not set the startup project, Visual Studio will try to run the *'ALL_BUILD'* project, which is not an executable, resulting in an error message.)
+* Add *VTK to PATH*. If you try to run the program, you will probably receive some error messages that tell you that VTK DLLs cannot be found. Do a right click on the project *scivis* in the *Solution Explorer* and select *Properties*. Go to *Debugging* and set as *Environment* the following line (adapt it to your build path of VTK): *PATH=%PATH;D:/VTK-9.4.2/build/bin/$(Configuration)*
+* Run the program. You should see the grid and two spheres.

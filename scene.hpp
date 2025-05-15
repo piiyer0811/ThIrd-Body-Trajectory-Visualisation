@@ -24,6 +24,7 @@ public:
 		mGrid(std::make_unique<Grid>()),
 		mSun(std::make_unique<Sun>()),
 		mEarth(std::make_unique<Earth>()),
+		
 		mTracer(std::make_unique<Tracer>())
 	{
 	}

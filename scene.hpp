@@ -4,12 +4,14 @@
 #include "sun.hpp"
 #include "earth.hpp"
 #include "tracer.hpp"
+#include "stars.hpp"
 
 #include <memory>
 
 #include <vtkRenderer.h>
 #include <vtkSmartPointer.h>
 #include <vtkRenderWindowInteractor.h>
+#include <vtkLight.h>
 
 /// <summary>
 /// Class that stores all content of the 3D scene.
@@ -25,7 +27,8 @@ public:
 		mSun(std::make_unique<Sun>()),
 		mEarth(std::make_unique<Earth>()),
 		
-		mTracer(std::make_unique<Tracer>())
+		mTracer(std::make_unique<Tracer>()),
+		mStars(std::make_unique<Stars>())
 	{
 	}
 
@@ -35,11 +38,30 @@ public:
 	/// <param name="renderer">Renderer to add the props to.</param>
 	void InitRenderer(vtkSmartPointer<vtkRenderer> renderer)
 	{
+		// 1) Create a point‐light at the sun’s location
+    auto sunLight = vtkSmartPointer<vtkLight>::New();
+    sunLight->SetLightTypeToSceneLight();                // make it a positional light
+    sunLight->SetPosition(
+        CRTBP::Sun().x(),
+        CRTBP::Sun().y(),
+		0.0
+    );
+
+    // 2) increase its brightness
+    sunLight->SetIntensity(12.0);                        // experiment 10–50
+
+    // 3) Spread it fully around
+    sunLight->SetConeAngle(90.0);                        // 90° cone = omni‐directional
+    sunLight->PositionalOn();                            // turn on point‐source attenuation
+
+    // 4) Add it to the renderer
+    renderer->AddLight(sunLight);
 		// add actors of all scene elements to the renderer
 		mGrid->InitRenderer(renderer);
 		mSun->InitRenderer(renderer);
 		mEarth->InitRenderer(renderer);
 		mTracer->InitRenderer(renderer);
+		mStars->InitRenderer(renderer);
 	}
 
 	/// <summary>
@@ -77,5 +99,6 @@ private:
 	std::unique_ptr<Grid> mGrid;						// a reference grid to provide spatial context
 	std::unique_ptr<Sun> mSun;							// First massive body: Sun
 	std::unique_ptr<Earth> mEarth;						// Second massive body: Earth
-	std::unique_ptr<Tracer> mTracer;					// Tracer for the third body with marginal mass.
+	std::unique_ptr<Tracer> mTracer;
+	std::unique_ptr<Stars> mStars;					// Tracer for the third body with marginal mass.
 };

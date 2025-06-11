@@ -86,6 +86,9 @@ public:
 		mRenderer->SetBackground(.2, .2, .2);
 		mRenderer->GetActiveCamera()->SetViewUp(0, 0, 1);
 		mRenderer->GetActiveCamera()->SetPosition(0, -4, 2);
+		mRenderer->UseImageBasedLightingOn();
+
+
 
 		// create scene
 		mScene = std::make_shared<Scene>();

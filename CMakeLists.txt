@@ -14,5 +14,10 @@ file(GLOB HPPFILES *.hpp)
 
 # create project
 add_executable(${PROJECT_NAME} MACOSX_BUNDLE ${SRCFILES} ${HPPFILES})
+
+# Copy the source images/ dir into the build output dir
+# so that build/images/panorama_image.png exists
+file(COPY "${CMAKE_SOURCE_DIR}/images"
+     DESTINATION "${CMAKE_BINARY_DIR}")
 target_link_libraries(${PROJECT_NAME} PRIVATE ${VTK_LIBRARIES})
 vtk_module_autoinit(TARGETS ${PROJECT_NAME} MODULES ${VTK_LIBRARIES})

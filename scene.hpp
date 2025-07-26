@@ -5,6 +5,8 @@
 #include "earth.hpp"
 #include "tracer.hpp"
 #include "stars.hpp"
+#include "lagrange.hpp"
+#include "jacobi.hpp"
 
 #include <memory>
 
@@ -28,7 +30,9 @@ public:
 		mEarth(std::make_unique<Earth>()),
 		
 		mTracer(std::make_unique<Tracer>()),
-		mStars(std::make_unique<Stars>())
+		mStars(std::make_unique<Stars>()),
+		mLagrangePoints(std::make_unique<LagrangePoints>()),
+		mJacobiConstant(std::make_unique<JacobiConstant>())
 	{
 	}
 
@@ -62,6 +66,8 @@ public:
 		mEarth->InitRenderer(renderer);
 		mTracer->InitRenderer(renderer);
 		mStars->InitRenderer(renderer);
+		mLagrangePoints->InitRenderer(renderer);
+		mJacobiConstant->InitRenderer(renderer);
 	}
 
 	/// <summary>
@@ -70,6 +76,7 @@ public:
 	/// <param name="renderWindowInteractor">Interactor to add UI elements to.</param>
 	void InitUI(vtkSmartPointer<vtkRenderWindowInteractor> renderWindowInteractor)
 	{
+		mJacobiConstant->InitUI(renderWindowInteractor);
 	}
 
 	/// <summary>
@@ -100,5 +107,7 @@ private:
 	std::unique_ptr<Sun> mSun;							// First massive body: Sun
 	std::unique_ptr<Earth> mEarth;						// Second massive body: Earth
 	std::unique_ptr<Tracer> mTracer;
-	std::unique_ptr<Stars> mStars;					// Tracer for the third body with marginal mass.
+	std::unique_ptr<Stars> mStars;	
+	std::unique_ptr<LagrangePoints> mLagrangePoints;
+	std::unique_ptr<JacobiConstant> mJacobiConstant;					// Tracer for the third body with marginal mass.
 };
